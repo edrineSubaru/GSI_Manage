@@ -8,6 +8,7 @@ import { Plus, Search, TrendingUp, TrendingDown, DollarSign, Calendar } from "lu
 import { Transaction, Project } from "@shared/schema";
 import { format } from "date-fns";
 import { apiRequest } from "@/lib/queryClient";
+import { AddTransactionDialog } from "@/components/dashboard/AddTransactionDialog";
 
 export default function Finance() {
   const [searchTerm, setSearchTerm] = useState("");
@@ -16,11 +17,11 @@ export default function Finance() {
   const queryClient = useQueryClient();
 
   const { data: transactions, isLoading } = useQuery<Transaction[]>({
-    queryKey: ["/api/transactions"],
+    queryKey: ["api", "transactions"],
   });
 
   const { data: projects } = useQuery<Project[]>({
-    queryKey: ["/api/projects"],
+    queryKey: ["api", "projects"],
   });
 
   const getProjectName = (projectId: string | null) => {
@@ -85,10 +86,15 @@ export default function Finance() {
     <div className="space-y-6 animate-fade-in">
       <div className="flex justify-between items-center">
         <h1 className="text-3xl font-bold">Financial Management</h1>
-        <Button>
-          <Plus className="h-4 w-4 mr-2" />
-          Add Transaction
-        </Button>
+        <AddTransactionDialog
+          projects={projects || []}
+          categories={categories}
+        >
+          <Button>
+            <Plus className="h-4 w-4 mr-2" />
+            Add Transaction
+          </Button>
+        </AddTransactionDialog>
       </div>
 
       {/* Financial Overview */}
@@ -225,10 +231,15 @@ export default function Finance() {
           {filteredTransactions.length === 0 ? (
             <div className="text-center py-8">
               <p className="text-gray-500 mb-4">No transactions found</p>
-              <Button>
-                <Plus className="h-4 w-4 mr-2" />
-                Add First Transaction
-              </Button>
+              <AddTransactionDialog
+                projects={projects || []}
+                categories={categories}
+              >
+                <Button>
+                  <Plus className="h-4 w-4 mr-2" />
+                  Add First Transaction
+                </Button>
+              </AddTransactionDialog>
             </div>
           ) : (
             <div className="overflow-x-auto">

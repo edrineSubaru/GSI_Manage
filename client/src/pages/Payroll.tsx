@@ -9,6 +9,7 @@ import { Plus, Search, DollarSign, CheckCircle, Clock, AlertCircle } from "lucid
 import { PayrollRecord, Employee } from "@shared/schema";
 import { format } from "date-fns";
 import { apiRequest } from "@/lib/queryClient";
+import { AddPayrollDialog } from "@/components/dashboard/AddPayrollDialog";
 
 export default function Payroll() {
   const [searchTerm, setSearchTerm] = useState("");
@@ -17,11 +18,11 @@ export default function Payroll() {
   const queryClient = useQueryClient();
 
   const { data: payrollRecords, isLoading } = useQuery<PayrollRecord[]>({
-    queryKey: ["/api/payroll"],
+    queryKey: ["api", "payroll"],
   });
 
   const { data: employees } = useQuery<Employee[]>({
-    queryKey: ["/api/employees"],
+    queryKey: ["api", "employees"],
   });
 
   const updatePayrollMutation = useMutation({
@@ -122,10 +123,12 @@ export default function Payroll() {
     <div className="space-y-6 animate-fade-in">
       <div className="flex justify-between items-center">
         <h1 className="text-3xl font-bold">Payroll Management</h1>
-        <Button>
-          <Plus className="h-4 w-4 mr-2" />
-          Process Payroll
-        </Button>
+        <AddPayrollDialog employees={employees || []}>
+          <Button>
+            <Plus className="h-4 w-4 mr-2" />
+            Process Payroll
+          </Button>
+        </AddPayrollDialog>
       </div>
 
       {/* Payroll Statistics */}
@@ -275,10 +278,12 @@ export default function Payroll() {
           {filteredPayroll.length === 0 ? (
             <div className="text-center py-8">
               <p className="text-gray-500 mb-4">No payroll records found</p>
-              <Button>
-                <Plus className="h-4 w-4 mr-2" />
-                Process First Payroll
-              </Button>
+              <AddPayrollDialog employees={employees || []}>
+                <Button>
+                  <Plus className="h-4 w-4 mr-2" />
+                  Process First Payroll
+                </Button>
+              </AddPayrollDialog>
             </div>
           ) : (
             <div className="overflow-x-auto">

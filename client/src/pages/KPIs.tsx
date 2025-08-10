@@ -4,10 +4,13 @@ import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { Plus, TrendingUp, TrendingDown } from "lucide-react";
 import { KPI } from "@shared/schema";
+import { Bar, BarChart, CartesianGrid, Cell, Legend, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
+import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
+import { AddKpiDialog } from "@/components/dashboard/AddKpiDialog";
 
 export default function KPIs() {
   const { data: kpis, isLoading } = useQuery<KPI[]>({
-    queryKey: ["/api/kpis"],
+    queryKey: ["api", "kpis"],
   });
 
   const calculateProgress = (current: string | null, target: string | null) => {
@@ -50,20 +53,97 @@ export default function KPIs() {
     <div className="space-y-6 animate-fade-in">
       <div className="flex justify-between items-center">
         <h1 className="text-3xl font-bold">KPI Monitoring</h1>
-        <Button>
-          <Plus className="h-4 w-4 mr-2" />
-          Add KPI
-        </Button>
+        <AddKpiDialog>
+          <Button>
+            <Plus className="h-4 w-4 mr-2" />
+            Add KPI
+          </Button>
+        </AddKpiDialog>
       </div>
+
+      {/* KPI Performance Chart */}
+      <Card>
+        <CardHeader>
+          <CardTitle>KPI Performance Overview</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <ChartContainer
+            config={{
+              currentValue: {
+                label: "Current Value",
+                color: "#3b82f6", // blue-500
+              },
+              targetValue: {
+                label: "Target Value",
+                color: "#10b981", // green-500
+              },
+            }}
+            className="h-80 w-full"
+          >
+            <ResponsiveContainer width="100%" height="100%">
+              <BarChart
+                data={(kpis && kpis.length > 0 ? kpis : [
+                  { id: "1", name: "Project Completion Rate", currentValue: "85", targetValue: "90", unit: "%" },
+                  { id: "2", name: "Client Satisfaction", currentValue: "4.2", targetValue: "4.5", unit: "/5" },
+                  { id: "3", name: "On-Time Delivery", currentValue: "78", targetValue: "85", unit: "%" },
+                  { id: "4", name: "Budget Adherence", currentValue: "92", targetValue: "95", unit: "%" },
+                  { id: "5", name: "Employee Retention", currentValue: "88", targetValue: "90", unit: "%" },
+                ]).map(kpi => ({
+                  name: kpi.name,
+                  currentValue: parseFloat(kpi.currentValue || "0"),
+                  targetValue: parseFloat(kpi.targetValue || "0"),
+                  unit: kpi.unit || "",
+                }))}
+                margin={{ top: 20, right: 30, left: 20, bottom: 60 }}
+              >
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis
+                  dataKey="name"
+                  angle={-45}
+                  textAnchor="end"
+                  height={60}
+                  tick={{ dx: -10, dy: 20 }}
+                />
+                <YAxis />
+                <ChartTooltip
+                  content={<ChartTooltipContent />}
+                  formatter={(value, name, props) => {
+                    const unit = props.payload.unit;
+                    return [`${value}${unit ? ` ${unit}` : ""}`, name];
+                  }}
+                />
+                <Legend />
+                <Bar dataKey="currentValue" name="Current Value" radius={[4, 4, 0, 0]}>
+                  {(kpis && kpis.length > 0 ? kpis : [
+                    { id: "1", name: "Project Completion Rate", currentValue: "85", targetValue: "90", unit: "%" },
+                    { id: "2", name: "Client Satisfaction", currentValue: "4.2", targetValue: "4.5", unit: "/5" },
+                    { id: "3", name: "On-Time Delivery", currentValue: "78", targetValue: "85", unit: "%" },
+                    { id: "4", name: "Budget Adherence", currentValue: "92", targetValue: "95", unit: "%" },
+                    { id: "5", name: "Employee Retention", currentValue: "88", targetValue: "90", unit: "%" },
+                  ]).map((kpi, index) => (
+                    <Cell
+                      key={`cell-${index}`}
+                      fill={parseFloat(kpi.currentValue || "0") >= parseFloat(kpi.targetValue || "0") ? "#10b981" : "#3b82f6"}
+                    />
+                  ))}
+                </Bar>
+                <Bar dataKey="targetValue" name="Target Value" fill="#10b981" radius={[4, 4, 0, 0]} />
+              </BarChart>
+            </ResponsiveContainer>
+          </ChartContainer>
+        </CardContent>
+      </Card>
 
       {kpis && kpis.length === 0 ? (
         <Card>
           <CardContent className="p-12 text-center">
             <p className="text-gray-500 mb-4">No KPIs configured yet</p>
-            <Button>
-              <Plus className="h-4 w-4 mr-2" />
-              Create Your First KPI
-            </Button>
+            <AddKpiDialog>
+              <Button>
+                <Plus className="h-4 w-4 mr-2" />
+                Create Your First KPI
+              </Button>
+            </AddKpiDialog>
           </CardContent>
         </Card>
       ) : (

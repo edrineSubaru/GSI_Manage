@@ -1,11 +1,11 @@
 import { useState } from "react";
 import { useLocation } from "wouter";
-import { Building } from "lucide-react";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useAuth } from "@/hooks/use-auth";
+import logoImage from "@/assets/logo.jpeg";
 
 export default function Login() {
   const [, setLocation] = useLocation();
@@ -20,6 +20,7 @@ export default function Login() {
     try {
       await login(formData);
       setLocation("/");
+      window.location.assign("/");      
     } catch (error) {
       // Error is handled by the hook
     }
@@ -37,7 +38,11 @@ export default function Login() {
       <Card className="w-full max-w-md">
         <CardHeader className="text-center">
           <div className="flex justify-center mb-4">
-            <Building className="h-12 w-12 text-primary" />
+            <img
+              src={logoImage}
+              alt="GSI Logo"
+              className="h-16 w-16 object-contain"
+            />
           </div>
           <h1 className="text-2xl font-bold text-gray-900">GSI Management System</h1>
           <p className="text-gray-600 mt-2">Sign in to your account</p>

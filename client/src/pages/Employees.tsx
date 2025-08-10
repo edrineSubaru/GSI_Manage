@@ -8,13 +8,14 @@ import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Plus, Search, Filter, Mail, Phone } from "lucide-react";
 import { Employee } from "@shared/schema";
 import { format } from "date-fns";
+import { AddEmployeeDialog } from "@/components/dashboard/AddEmployeeDialog";
 
 export default function Employees() {
   const [searchTerm, setSearchTerm] = useState("");
   const [departmentFilter, setDepartmentFilter] = useState<string>("");
 
   const { data: employees, isLoading } = useQuery<Employee[]>({
-    queryKey: ["/api/employees"],
+    queryKey: ["api", "employees"],
   });
 
   const getInitials = (firstName: string, lastName: string) => {
@@ -62,10 +63,12 @@ export default function Employees() {
     <div className="space-y-6 animate-fade-in">
       <div className="flex justify-between items-center">
         <h1 className="text-3xl font-bold">Employee Management</h1>
-        <Button>
-          <Plus className="h-4 w-4 mr-2" />
-          Add Employee
-        </Button>
+        <AddEmployeeDialog departments={departments}>
+          <Button>
+            <Plus className="h-4 w-4 mr-2" />
+            Add Employee
+          </Button>
+        </AddEmployeeDialog>
       </div>
 
       {/* Statistics */}
@@ -155,10 +158,12 @@ export default function Employees() {
         <Card>
           <CardContent className="p-12 text-center">
             <p className="text-gray-500 mb-4">No employees found</p>
-            <Button>
-              <Plus className="h-4 w-4 mr-2" />
-              Add First Employee
-            </Button>
+            <AddEmployeeDialog departments={departments}>
+              <Button>
+                <Plus className="h-4 w-4 mr-2" />
+                Add First Employee
+              </Button>
+            </AddEmployeeDialog>
           </CardContent>
         </Card>
       ) : (

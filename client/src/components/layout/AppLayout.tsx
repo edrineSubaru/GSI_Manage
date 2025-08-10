@@ -1,8 +1,9 @@
 import { Sidebar, SidebarHeader, SidebarContent, SidebarNav, SidebarNavList, SidebarNavItem } from "@/components/ui/sidebar";
-import { Building, BarChart3, CheckSquare, TrendingUp, Users, UserCog, DollarSign, CreditCard, FileText, BarChart } from "lucide-react";
+import { BarChart3, CheckSquare, TrendingUp, Users, UserCog, DollarSign, CreditCard, FileText, BarChart, Box } from "lucide-react";
 import { Link, useLocation } from "wouter";
 import { cn } from "@/lib/utils";
 import { TopBar } from "./TopBar";
+import logoImage from "@/assets/logo.jpeg";
 
 interface AppLayoutProps {
   children: React.ReactNode;
@@ -18,6 +19,8 @@ const navigationItems = [
   { path: "/payroll", label: "Payroll", icon: CreditCard },
   { path: "/proposals", label: "Proposals", icon: FileText },
   { path: "/monitoring", label: "Monitoring & Evaluation", icon: BarChart },
+  { path: "/reports", label: "Reports", icon: FileText },
+  { path: "/assets", label: "Asset Management", icon: Box },
 ];
 
 export function AppLayout({ children }: AppLayoutProps) {
@@ -28,7 +31,11 @@ export function AppLayout({ children }: AppLayoutProps) {
       <Sidebar>
         <SidebarHeader>
           <div className="flex items-center space-x-3">
-            <Building className="h-8 w-8 text-primary" />
+            <img
+              src={logoImage}
+              alt="GSI Logo"
+              className="h-10 w-10 object-contain"
+            />
             <div>
               <h1 className="text-lg font-bold text-gray-900">GSI</h1>
               <p className="text-xs text-gray-600">Management System</p>
@@ -66,9 +73,9 @@ export function AppLayout({ children }: AppLayoutProps) {
         </SidebarContent>
       </Sidebar>
 
-      <main className="flex-1 overflow-hidden">
+      <main className="flex-1 flex flex-col overflow-hidden">
         <TopBar />
-        <div className="h-full overflow-y-auto p-6">
+        <div className="flex-1 overflow-y-auto p-6">
           {children}
         </div>
       </main>

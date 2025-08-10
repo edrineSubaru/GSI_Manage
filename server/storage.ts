@@ -1,4 +1,4 @@
-import { type User, type InsertUser, type Employee, type InsertEmployee, type Project, type InsertProject, type Task, type InsertTask, type KPI, type InsertKPI, type Transaction, type InsertTransaction, type PayrollRecord, type InsertPayrollRecord, type Proposal, type InsertProposal, type Evaluation, type InsertEvaluation } from "@shared/schema";
+import { type User, type InsertUser, type Employee, type InsertEmployee, type Project, type InsertProject, type Task, type InsertTask, type KPI, type InsertKPI, type Transaction, type InsertTransaction, type PayrollRecord, type InsertPayrollRecord, type Proposal, type InsertProposal, type Evaluation, type InsertEvaluation, type Report, type InsertReport, type Asset, type InsertAsset } from "@shared/schema";
 import { randomUUID } from "crypto";
 
 export interface IStorage {
@@ -7,21 +7,21 @@ export interface IStorage {
   getUserByEmail(email: string): Promise<User | undefined>;
   createUser(user: InsertUser): Promise<User>;
   updateUser(id: string, user: Partial<User>): Promise<User | undefined>;
-  
+
   // Employees
   getEmployees(): Promise<Employee[]>;
   getEmployee(id: string): Promise<Employee | undefined>;
   createEmployee(employee: InsertEmployee): Promise<Employee>;
   updateEmployee(id: string, employee: Partial<Employee>): Promise<Employee | undefined>;
   deleteEmployee(id: string): Promise<boolean>;
-  
+
   // Projects
   getProjects(): Promise<Project[]>;
   getProject(id: string): Promise<Project | undefined>;
   createProject(project: InsertProject): Promise<Project>;
   updateProject(id: string, project: Partial<Project>): Promise<Project | undefined>;
   deleteProject(id: string): Promise<boolean>;
-  
+
   // Tasks
   getTasks(): Promise<Task[]>;
   getTask(id: string): Promise<Task | undefined>;
@@ -30,41 +30,53 @@ export interface IStorage {
   createTask(task: InsertTask): Promise<Task>;
   updateTask(id: string, task: Partial<Task>): Promise<Task | undefined>;
   deleteTask(id: string): Promise<boolean>;
-  
+
   // KPIs
   getKPIs(): Promise<KPI[]>;
   getKPI(id: string): Promise<KPI | undefined>;
   createKPI(kpi: InsertKPI): Promise<KPI>;
   updateKPI(id: string, kpi: Partial<KPI>): Promise<KPI | undefined>;
   deleteKPI(id: string): Promise<boolean>;
-  
+
   // Transactions
   getTransactions(): Promise<Transaction[]>;
   getTransaction(id: string): Promise<Transaction | undefined>;
   createTransaction(transaction: InsertTransaction): Promise<Transaction>;
   updateTransaction(id: string, transaction: Partial<Transaction>): Promise<Transaction | undefined>;
   deleteTransaction(id: string): Promise<boolean>;
-  
+
   // Payroll
   getPayrollRecords(): Promise<PayrollRecord[]>;
   getPayrollRecord(id: string): Promise<PayrollRecord | undefined>;
   getPayrollByEmployee(employeeId: string): Promise<PayrollRecord[]>;
   createPayrollRecord(payroll: InsertPayrollRecord): Promise<PayrollRecord>;
   updatePayrollRecord(id: string, payroll: Partial<PayrollRecord>): Promise<PayrollRecord | undefined>;
-  
+
   // Proposals
   getProposals(): Promise<Proposal[]>;
   getProposal(id: string): Promise<Proposal | undefined>;
   createProposal(proposal: InsertProposal): Promise<Proposal>;
   updateProposal(id: string, proposal: Partial<Proposal>): Promise<Proposal | undefined>;
   deleteProposal(id: string): Promise<boolean>;
-  
+
   // Evaluations
   getEvaluations(): Promise<Evaluation[]>;
   getEvaluation(id: string): Promise<Evaluation | undefined>;
   getEvaluationsByProject(projectId: string): Promise<Evaluation[]>;
   createEvaluation(evaluation: InsertEvaluation): Promise<Evaluation>;
   updateEvaluation(id: string, evaluation: Partial<Evaluation>): Promise<Evaluation | undefined>;
+
+  // Reports
+  getReports(): Promise<Report[]>;
+  getReport(id: string): Promise<Report | undefined>;
+  createReport(type: string): Promise<Report>;
+
+  // Assets
+  getAssets(): Promise<Asset[]>;
+  getAsset(id: string): Promise<Asset | undefined>;
+  createAsset(asset: InsertAsset): Promise<Asset>;
+  updateAsset(id: string, asset: Partial<Asset>): Promise<Asset | undefined>;
+  deleteAsset(id: string): Promise<boolean>;
 }
 
 export class MemStorage implements IStorage {
@@ -77,6 +89,8 @@ export class MemStorage implements IStorage {
   private payrollRecords: Map<string, PayrollRecord> = new Map();
   private proposals: Map<string, Proposal> = new Map();
   private evaluations: Map<string, Evaluation> = new Map();
+  private reports: Map<string, Report> = new Map();
+  private assets: Map<string, Asset> = new Map();
 
   constructor() {
     this.seedData();
@@ -118,6 +132,102 @@ export class MemStorage implements IStorage {
       },
       {
         id: "emp-2",
+        employeeId: "GSI002",
+        firstName: "Mark",
+        lastName: "Johnson",
+        email: "mark.johnson@governancesystemsint.com",
+        phone: "+256757578581",
+        position: "Senior Consultant",
+        department: "Consulting",
+        hireDate: new Date("2022-03-01"),
+        salary: "85000.00",
+        status: "active",
+        managerId: "emp-1",
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
+      {
+        id: "emp-3",
+        employeeId: "GSI003",
+        firstName: "Sandra",
+        lastName: "Williams",
+        email: "sandra.williams@governancesystemsint.com",
+        phone: "+256758123456",
+        position: "Project Manager",
+        department: "Project Management",
+        hireDate: new Date("2021-06-15"),
+        salary: "95000.00",
+        status: "active",
+        managerId: "emp-1",
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
+      {
+        id: "emp-4",
+        employeeId: "GSI004",
+        firstName: "David",
+        lastName: "Mugisha",
+        email: "david.mugisha@governancesystemsint.com",
+        phone: "+256759789012",
+        position: "Software Engineer",
+        department: "IT",
+        hireDate: new Date("2023-01-10"),
+        salary: "70000.00",
+        status: "active",
+        managerId: "emp-2",
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
+      {
+        id: "emp-5",
+        employeeId: "GSI005",
+        firstName: "Aisha",
+        lastName: "Kamanzi",
+        email: "aisha.kamanzi@governancesystemsint.com",
+        phone: "+256756456789",
+        position: "Business Analyst",
+        department: "Consulting",
+        hireDate: new Date("2020-11-20"),
+        salary: "78000.00",
+        status: "inactive",
+        managerId: "emp-2",
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
+      {
+        id: "emp-6",
+        employeeId: "GSI006",
+        firstName: "Robert",
+        lastName: "Ngugi",
+        email: "robert.ngugi@governancesystemsint.com",
+        phone: "+256755234567",
+        position: "HR Manager",
+        department: "Human Resources",
+        hireDate: new Date("2019-08-05"),
+        salary: "88000.00",
+        status: "active",
+        managerId: "emp-1",
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
+      {
+        id: "emp-7",
+        employeeId: "GSI002",
+        firstName: "Edrine",
+        lastName: "Mwesigwa",
+        email: "edrine.mwesigwa@governancesystemsint.com",
+        phone: "+256757578581",
+        position: "Senior Consultant",
+        department: "Consulting",
+        hireDate: new Date("2022-03-01"),
+        salary: "85000.00",
+        status: "active",
+        managerId: "emp-1",
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
+      {
+        id: "emp-8",
         employeeId: "GSI002",
         firstName: "Mark",
         lastName: "Johnson",
@@ -198,6 +308,41 @@ export class MemStorage implements IStorage {
       },
     ];
     tasks.forEach(task => this.tasks.set(task.id, task));
+
+    // Sample assets
+    const assets: Asset[] = [
+      {
+        id: "asset-1",
+        name: "Dell Laptop",
+        description: "Dell XPS 13 laptop for development work",
+        category: "Electronics",
+        serialNumber: "DLXPS13-001",
+        purchaseDate: new Date("2023-01-15"),
+        purchaseValue: "1200.00",
+        currentValue: "800.00",
+        status: "active",
+        assignedTo: "emp-4",
+        location: "Kampala Office",
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
+      {
+        id: "asset-2",
+        name: "Toyota Vehicle",
+        description: "Toyota Corolla for field visits",
+        category: "Vehicle",
+        serialNumber: "TYT-CLR-2023",
+        purchaseDate: new Date("2023-03-10"),
+        purchaseValue: "25000.00",
+        currentValue: "20000.00",
+        status: "active",
+        assignedTo: null,
+        location: "Entebbe Office",
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
+    ];
+    assets.forEach(asset => this.assets.set(asset.id, asset));
   }
 
   // User methods
@@ -213,6 +358,9 @@ export class MemStorage implements IStorage {
     const id = randomUUID();
     const user: User = {
       ...insertUser,
+      role: insertUser.role ?? "user",
+      permissions: insertUser.permissions ? [...insertUser.permissions] : [],
+      isActive: insertUser.isActive ?? true,
       id,
       createdAt: new Date(),
       updatedAt: new Date(),
@@ -224,7 +372,7 @@ export class MemStorage implements IStorage {
   async updateUser(id: string, userUpdate: Partial<User>): Promise<User | undefined> {
     const existing = this.users.get(id);
     if (!existing) return undefined;
-    
+
     const updated = { ...existing, ...userUpdate, updatedAt: new Date() };
     this.users.set(id, updated);
     return updated;
@@ -243,6 +391,10 @@ export class MemStorage implements IStorage {
     const id = randomUUID();
     const employee: Employee = {
       ...insertEmployee,
+      status: insertEmployee.status ?? "active",
+      phone: insertEmployee.phone ?? null,
+      managerId: insertEmployee.managerId ?? null,
+      salary: insertEmployee.salary ?? null,
       id,
       createdAt: new Date(),
       updatedAt: new Date(),
@@ -254,7 +406,7 @@ export class MemStorage implements IStorage {
   async updateEmployee(id: string, employeeUpdate: Partial<Employee>): Promise<Employee | undefined> {
     const existing = this.employees.get(id);
     if (!existing) return undefined;
-    
+
     const updated = { ...existing, ...employeeUpdate, updatedAt: new Date() };
     this.employees.set(id, updated);
     return updated;
@@ -277,6 +429,12 @@ export class MemStorage implements IStorage {
     const id = randomUUID();
     const project: Project = {
       ...insertProject,
+      status: insertProject.status ?? "active",
+      description: insertProject.description ?? null,
+      endDate: insertProject.endDate ?? null,
+      budget: insertProject.budget ?? null,
+      progress: insertProject.progress ?? null,
+      managerId: insertProject.managerId ?? null,
       id,
       createdAt: new Date(),
       updatedAt: new Date(),
@@ -288,7 +446,7 @@ export class MemStorage implements IStorage {
   async updateProject(id: string, projectUpdate: Partial<Project>): Promise<Project | undefined> {
     const existing = this.projects.get(id);
     if (!existing) return undefined;
-    
+
     const updated = { ...existing, ...projectUpdate, updatedAt: new Date() };
     this.projects.set(id, updated);
     return updated;
@@ -319,6 +477,12 @@ export class MemStorage implements IStorage {
     const id = randomUUID();
     const task: Task = {
       ...insertTask,
+      description: insertTask.description ?? null,
+      status: insertTask.status ?? "pending",
+      priority: insertTask.priority ?? "medium",
+      assigneeId: insertTask.assigneeId ?? null,
+      projectId: insertTask.projectId ?? null,
+      dueDate: insertTask.dueDate ?? null,
       id,
       completedAt: null,
       createdAt: new Date(),
@@ -331,7 +495,7 @@ export class MemStorage implements IStorage {
   async updateTask(id: string, taskUpdate: Partial<Task>): Promise<Task | undefined> {
     const existing = this.tasks.get(id);
     if (!existing) return undefined;
-    
+
     const updated = { ...existing, ...taskUpdate, updatedAt: new Date() };
     this.tasks.set(id, updated);
     return updated;
@@ -354,6 +518,10 @@ export class MemStorage implements IStorage {
     const id = randomUUID();
     const kpi: KPI = {
       ...insertKPI,
+      description: insertKPI.description ?? null,
+      targetValue: insertKPI.targetValue ?? null,
+      currentValue: insertKPI.currentValue ?? null,
+      unit: insertKPI.unit ?? null,
       id,
       createdAt: new Date(),
       updatedAt: new Date(),
@@ -365,7 +533,7 @@ export class MemStorage implements IStorage {
   async updateKPI(id: string, kpiUpdate: Partial<KPI>): Promise<KPI | undefined> {
     const existing = this.kpis.get(id);
     if (!existing) return undefined;
-    
+
     const updated = { ...existing, ...kpiUpdate, updatedAt: new Date() };
     this.kpis.set(id, updated);
     return updated;
@@ -388,6 +556,8 @@ export class MemStorage implements IStorage {
     const id = randomUUID();
     const transaction: Transaction = {
       ...insertTransaction,
+      projectId: insertTransaction.projectId ?? null,
+      createdBy: insertTransaction.createdBy ?? null,
       id,
       createdAt: new Date(),
     };
@@ -398,7 +568,7 @@ export class MemStorage implements IStorage {
   async updateTransaction(id: string, transactionUpdate: Partial<Transaction>): Promise<Transaction | undefined> {
     const existing = this.transactions.get(id);
     if (!existing) return undefined;
-    
+
     const updated = { ...existing, ...transactionUpdate };
     this.transactions.set(id, updated);
     return updated;
@@ -425,6 +595,10 @@ export class MemStorage implements IStorage {
     const id = randomUUID();
     const payroll: PayrollRecord = {
       ...insertPayroll,
+      status: insertPayroll.status ?? "pending",
+      allowances: insertPayroll.allowances ?? null,
+      deductions: insertPayroll.deductions ?? null,
+      approvedBy: insertPayroll.approvedBy ?? null,
       id,
       approvedAt: null,
       createdAt: new Date(),
@@ -436,7 +610,7 @@ export class MemStorage implements IStorage {
   async updatePayrollRecord(id: string, payrollUpdate: Partial<PayrollRecord>): Promise<PayrollRecord | undefined> {
     const existing = this.payrollRecords.get(id);
     if (!existing) return undefined;
-    
+
     const updated = { ...existing, ...payrollUpdate };
     if (payrollUpdate.approvedBy && !existing.approvedAt) {
       updated.approvedAt = new Date();
@@ -458,6 +632,12 @@ export class MemStorage implements IStorage {
     const id = randomUUID();
     const proposal: Proposal = {
       ...insertProposal,
+      description: insertProposal.description ?? null,
+      status: insertProposal.status ?? "draft",
+      value: insertProposal.value ?? null,
+      submissionDate: insertProposal.submissionDate ?? null,
+      deadlineDate: insertProposal.deadlineDate ?? null,
+      leadId: insertProposal.leadId ?? null,
       id,
       createdAt: new Date(),
       updatedAt: new Date(),
@@ -469,7 +649,7 @@ export class MemStorage implements IStorage {
   async updateProposal(id: string, proposalUpdate: Partial<Proposal>): Promise<Proposal | undefined> {
     const existing = this.proposals.get(id);
     if (!existing) return undefined;
-    
+
     const updated = { ...existing, ...proposalUpdate, updatedAt: new Date() };
     this.proposals.set(id, updated);
     return updated;
@@ -496,6 +676,10 @@ export class MemStorage implements IStorage {
     const id = randomUUID();
     const evaluation: Evaluation = {
       ...insertEvaluation,
+      findings: insertEvaluation.findings ?? null,
+      recommendations: insertEvaluation.recommendations ?? null,
+      score: insertEvaluation.score ?? null,
+      evaluatorId: insertEvaluation.evaluatorId ?? null,
       id,
       createdAt: new Date(),
     };
@@ -506,10 +690,91 @@ export class MemStorage implements IStorage {
   async updateEvaluation(id: string, evaluationUpdate: Partial<Evaluation>): Promise<Evaluation | undefined> {
     const existing = this.evaluations.get(id);
     if (!existing) return undefined;
-    
+
     const updated = { ...existing, ...evaluationUpdate };
     this.evaluations.set(id, updated);
     return updated;
+  }
+
+  // Report methods
+  async getReports(): Promise<Report[]> {
+    return Array.from(this.reports.values());
+  }
+
+  async getReport(id: string): Promise<Report | undefined> {
+    return this.reports.get(id);
+  }
+
+  async createReport(type: string): Promise<Report> {
+    const id = randomUUID();
+    
+    // Generate report name based on type
+    const reportNames: Record<string, string> = {
+      "employee-performance": "Employee Performance Report",
+      "financial-summary": "Financial Summary Report",
+      "project-progress": "Project Progress Report",
+      "task-completion": "Task Completion Report",
+      "kpi-analysis": "KPI Analysis Report",
+    };
+    
+    const name = reportNames[type] || "Custom Report";
+    
+    const report: Report = {
+      id,
+      name,
+      type,
+      description: `Generated report for ${name}`,
+      generatedAt: new Date(),
+      status: "completed",
+      filePath: null,
+      createdBy: null,
+      createdAt: new Date(),
+    };
+    
+    this.reports.set(id, report);
+    return report;
+  }
+
+  // Asset methods
+  async getAssets(): Promise<Asset[]> {
+    return Array.from(this.assets.values());
+  }
+
+  async getAsset(id: string): Promise<Asset | undefined> {
+    return this.assets.get(id);
+  }
+
+  async createAsset(insertAsset: InsertAsset): Promise<Asset> {
+    const id = randomUUID();
+    const asset: Asset = {
+      ...insertAsset,
+      description: insertAsset.description ?? null,
+      status: insertAsset.status ?? "active",
+      serialNumber: insertAsset.serialNumber ?? null,
+      purchaseDate: insertAsset.purchaseDate ?? null,
+      purchaseValue: insertAsset.purchaseValue ?? null,
+      currentValue: insertAsset.currentValue ?? null,
+      assignedTo: insertAsset.assignedTo ?? null,
+      location: insertAsset.location ?? null,
+      id,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    };
+    this.assets.set(id, asset);
+    return asset;
+  }
+
+  async updateAsset(id: string, assetUpdate: Partial<Asset>): Promise<Asset | undefined> {
+    const existing = this.assets.get(id);
+    if (!existing) return undefined;
+
+    const updated = { ...existing, ...assetUpdate, updatedAt: new Date() };
+    this.assets.set(id, updated);
+    return updated;
+  }
+
+  async deleteAsset(id: string): Promise<boolean> {
+    return this.assets.delete(id);
   }
 }
 

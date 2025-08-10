@@ -16,6 +16,8 @@ import Finance from "@/pages/Finance";
 import Payroll from "@/pages/Payroll";
 import Proposals from "@/pages/Proposals";
 import Monitoring from "@/pages/Monitoring";
+import Reports from "@/pages/Reports";
+import Assets from "@/pages/Assets";
 
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
   const { isAuthenticated } = useAuth();
@@ -74,6 +76,16 @@ function Router() {
       <Route path="/monitoring">
         <ProtectedRoute>
           <Monitoring />
+        </ProtectedRoute>
+      </Route>
+      <Route path="/reports">
+        <ProtectedRoute>
+          <Reports />
+        </ProtectedRoute>
+      </Route>
+      <Route path="/assets">
+        <ProtectedRoute>
+          <Assets />
         </ProtectedRoute>
       </Route>
       <Route component={NotFound} />

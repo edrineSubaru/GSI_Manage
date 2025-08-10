@@ -136,7 +136,43 @@ export const evaluations = pgTable("evaluations", {
   createdAt: timestamp("created_at").defaultNow(),
 });
 
+// Reports
+export const reports = pgTable("reports", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  name: text("name").notNull(),
+  type: text("type").notNull(),
+  description: text("description"),
+  generatedAt: timestamp("generated_at").defaultNow(),
+  status: text("status").notNull().default("pending"), // pending, completed, failed
+  filePath: text("file_path"),
+  createdBy: varchar("created_by"),
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
+// Assets
+export const assets = pgTable("assets", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  name: text("name").notNull(),
+  description: text("description"),
+  category: text("category").notNull(),
+  serialNumber: text("serial_number").unique(),
+  purchaseDate: timestamp("purchase_date"),
+  purchaseValue: decimal("purchase_value", { precision: 12, scale: 2 }),
+  currentValue: decimal("current_value", { precision: 12, scale: 2 }),
+  status: text("status").notNull().default("active"), // active, maintenance, retired
+  assignedTo: varchar("assigned_to"), // employee id
+  location: text("location"),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
 // Insert Schemas
+export const insertReportSchema = createInsertSchema(reports).omit({
+  id: true,
+  createdAt: true,
+  generatedAt: true,
+});
+
 export const insertUserSchema = createInsertSchema(users).omit({
   id: true,
   createdAt: true,
@@ -190,6 +226,12 @@ export const insertEvaluationSchema = createInsertSchema(evaluations).omit({
   createdAt: true,
 });
 
+export const insertAssetSchema = createInsertSchema(assets).omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+});
+
 // Types
 export type User = typeof users.$inferSelect;
 export type InsertUser = z.infer<typeof insertUserSchema>;
@@ -214,6 +256,12 @@ export type InsertPayrollRecord = z.infer<typeof insertPayrollSchema>;
 
 export type Proposal = typeof proposals.$inferSelect;
 export type InsertProposal = z.infer<typeof insertProposalSchema>;
+
+export type Report = typeof reports.$inferSelect;
+export type InsertReport = z.infer<typeof insertReportSchema>;
+
+export type Asset = typeof assets.$inferSelect;
+export type InsertAsset = z.infer<typeof insertAssetSchema>;
 
 export type Evaluation = typeof evaluations.$inferSelect;
 export type InsertEvaluation = z.infer<typeof insertEvaluationSchema>;

@@ -9,6 +9,7 @@ import { Plus, Search, FileText, Calendar, DollarSign, User } from "lucide-react
 import { Proposal, Employee } from "@shared/schema";
 import { format } from "date-fns";
 import { apiRequest } from "@/lib/queryClient";
+import { AddProposalDialog } from "@/components/dashboard/AddProposalDialog";
 
 export default function Proposals() {
   const [searchTerm, setSearchTerm] = useState("");
@@ -16,11 +17,11 @@ export default function Proposals() {
   const queryClient = useQueryClient();
 
   const { data: proposals, isLoading } = useQuery<Proposal[]>({
-    queryKey: ["/api/proposals"],
+    queryKey: ["api", "proposals"],
   });
 
   const { data: employees } = useQuery<Employee[]>({
-    queryKey: ["/api/employees"],
+    queryKey: ["api", "employees"],
   });
 
   const updateProposalMutation = useMutation({
@@ -126,10 +127,12 @@ export default function Proposals() {
     <div className="space-y-6 animate-fade-in">
       <div className="flex justify-between items-center">
         <h1 className="text-3xl font-bold">Proposal Management</h1>
-        <Button>
-          <Plus className="h-4 w-4 mr-2" />
-          Create Proposal
-        </Button>
+        <AddProposalDialog employees={employees || []}>
+          <Button>
+            <Plus className="h-4 w-4 mr-2" />
+            Create Proposal
+          </Button>
+        </AddProposalDialog>
       </div>
 
       {/* Proposal Statistics */}
@@ -266,10 +269,12 @@ export default function Proposals() {
           <Card className="lg:col-span-2">
             <CardContent className="p-12 text-center">
               <p className="text-gray-500 mb-4">No proposals found</p>
-              <Button>
-                <Plus className="h-4 w-4 mr-2" />
-                Create First Proposal
-              </Button>
+              <AddProposalDialog employees={employees || []}>
+                <Button>
+                  <Plus className="h-4 w-4 mr-2" />
+                  Create First Proposal
+                </Button>
+              </AddProposalDialog>
             </CardContent>
           </Card>
         ) : (

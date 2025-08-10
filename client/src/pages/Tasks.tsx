@@ -5,9 +5,10 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Plus, Search, Filter } from "lucide-react";
-import { Task, Employee } from "@shared/schema";
+import { Task, Employee, Project } from "@shared/schema";
 import { format } from "date-fns";
 import { apiRequest } from "@/lib/queryClient";
+import { AddTaskDialog } from "@/components/dashboard/AddTaskDialog";
 
 export default function Tasks() {
   const [searchTerm, setSearchTerm] = useState("");
@@ -15,11 +16,15 @@ export default function Tasks() {
   const queryClient = useQueryClient();
 
   const { data: tasks, isLoading } = useQuery<Task[]>({
-    queryKey: ["/api/tasks"],
+    queryKey: ["api", "tasks"],
   });
 
   const { data: employees } = useQuery<Employee[]>({
-    queryKey: ["/api/employees"],
+    queryKey: ["api", "employees"],
+  });
+
+  const { data: projects } = useQuery<Project[]>({
+    queryKey: ["api", "projects"],
   });
 
   const updateTaskMutation = useMutation({
@@ -105,10 +110,15 @@ export default function Tasks() {
     <div className="space-y-6 animate-fade-in">
       <div className="flex justify-between items-center">
         <h1 className="text-3xl font-bold">Task Management</h1>
-        <Button>
-          <Plus className="h-4 w-4 mr-2" />
-          Create Task
-        </Button>
+        <AddTaskDialog
+          projects={projects || []}
+          employees={employees || []}
+        >
+          <Button>
+            <Plus className="h-4 w-4 mr-2" />
+            Create Task
+          </Button>
+        </AddTaskDialog>
       </div>
 
       {/* Filters */}

@@ -8,13 +8,14 @@ import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Plus, Search, Shield, User, Settings } from "lucide-react";
 import { User as UserType } from "@shared/schema";
 import { format } from "date-fns";
+import { AddUserDialog } from "@/components/dashboard/AddUserDialog";
 
 export default function Users() {
   const [searchTerm, setSearchTerm] = useState("");
   const [roleFilter, setRoleFilter] = useState<string>("");
 
   const { data: users, isLoading } = useQuery<UserType[]>({
-    queryKey: ["/api/users"],
+    queryKey: ["api", "users"],
   });
 
   const getInitials = (firstName: string, lastName: string) => {
@@ -83,10 +84,12 @@ export default function Users() {
     <div className="space-y-6 animate-fade-in">
       <div className="flex justify-between items-center">
         <h1 className="text-3xl font-bold">User Management</h1>
-        <Button>
-          <Plus className="h-4 w-4 mr-2" />
-          Add User
-        </Button>
+        <AddUserDialog>
+          <Button>
+            <Plus className="h-4 w-4 mr-2" />
+            Add User
+          </Button>
+        </AddUserDialog>
       </div>
 
       {/* Statistics */}
@@ -177,10 +180,12 @@ export default function Users() {
         <Card>
           <CardContent className="p-12 text-center">
             <p className="text-gray-500 mb-4">No users found</p>
-            <Button>
-              <Plus className="h-4 w-4 mr-2" />
-              Add First User
-            </Button>
+            <AddUserDialog>
+              <Button>
+                <Plus className="h-4 w-4 mr-2" />
+                Add First User
+              </Button>
+            </AddUserDialog>
           </CardContent>
         </Card>
       ) : (

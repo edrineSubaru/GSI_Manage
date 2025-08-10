@@ -9,21 +9,22 @@ import { Progress } from "@/components/ui/progress";
 import { Plus, Search, BarChart3, TrendingUp, Award, Calendar } from "lucide-react";
 import { Evaluation, Project, Employee } from "@shared/schema";
 import { format } from "date-fns";
+import { AddEvaluationDialog } from "@/components/dashboard/AddEvaluationDialog";
 
 export default function Monitoring() {
   const [searchTerm, setSearchTerm] = useState("");
   const [typeFilter, setTypeFilter] = useState<string>("");
 
   const { data: evaluations, isLoading } = useQuery<Evaluation[]>({
-    queryKey: ["/api/evaluations"],
+    queryKey: ["api", "evaluations"],
   });
 
   const { data: projects } = useQuery<Project[]>({
-    queryKey: ["/api/projects"],
+    queryKey: ["api", "projects"],
   });
 
   const { data: employees } = useQuery<Employee[]>({
-    queryKey: ["/api/employees"],
+    queryKey: ["api", "employees"],
   });
 
   const getProjectName = (projectId: string) => {
@@ -117,10 +118,15 @@ export default function Monitoring() {
     <div className="space-y-6 animate-fade-in">
       <div className="flex justify-between items-center">
         <h1 className="text-3xl font-bold">Monitoring & Evaluation</h1>
-        <Button>
-          <Plus className="h-4 w-4 mr-2" />
-          Create Evaluation
-        </Button>
+        <AddEvaluationDialog
+          projects={projects || []}
+          employees={employees || []}
+        >
+          <Button>
+            <Plus className="h-4 w-4 mr-2" />
+            Create Evaluation
+          </Button>
+        </AddEvaluationDialog>
       </div>
 
       {/* M&E Statistics */}
@@ -278,10 +284,15 @@ export default function Monitoring() {
           <Card className="lg:col-span-2">
             <CardContent className="p-12 text-center">
               <p className="text-gray-500 mb-4">No evaluations found</p>
-              <Button>
-                <Plus className="h-4 w-4 mr-2" />
-                Create First Evaluation
-              </Button>
+              <AddEvaluationDialog
+                projects={projects || []}
+                employees={employees || []}
+              >
+                <Button>
+                  <Plus className="h-4 w-4 mr-2" />
+                  Create First Evaluation
+                </Button>
+              </AddEvaluationDialog>
             </CardContent>
           </Card>
         ) : (
