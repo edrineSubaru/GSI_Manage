@@ -31,7 +31,7 @@ jobs:
        # - run: npm test  -- this was causing me issues since i dint define it in my json file i will handle this later
 
     - name: build and push Docker image     
-      uses: docker/login-action@v5
+      uses: docker/login-action@v
       with:
         image: edrineviper/gsi_frontend
         registry: docker.io
