@@ -1,0 +1,54 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\edrin\\OneDrive\\Desktop\\Work Space\\GSI_Manage\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{0BA39EDD-D348-89C2-33D1-C03B1E33CD60}|GSI_Manage_BackEnd\\GSI_Manage_BackEnd.csproj|c:\\users\\edrin\\onedrive\\desktop\\work space\\gsi_manage\\gsi_manage_backend\\application\\services\\authservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{0BA39EDD-D348-89C2-33D1-C03B1E33CD60}|GSI_Manage_BackEnd\\GSI_Manage_BackEnd.csproj|solutionrelative:gsi_manage_backend\\application\\services\\authservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{0BA39EDD-D348-89C2-33D1-C03B1E33CD60}|GSI_Manage_BackEnd\\GSI_Manage_BackEnd.csproj|c:\\users\\edrin\\onedrive\\desktop\\work space\\gsi_manage\\gsi_manage_backend\\presentation\\controllers\\authcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{0BA39EDD-D348-89C2-33D1-C03B1E33CD60}|GSI_Manage_BackEnd\\GSI_Manage_BackEnd.csproj|solutionrelative:gsi_manage_backend\\presentation\\controllers\\authcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 1,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "AuthController.cs",
+              "DocumentMoniker": "C:\\Users\\edrin\\OneDrive\\Desktop\\Work Space\\GSI_Manage\\GSI_Manage_BackEnd\\Presentation\\Controllers\\AuthController.cs",
+              "RelativeDocumentMoniker": "GSI_Manage_BackEnd\\Presentation\\Controllers\\AuthController.cs",
+              "ToolTip": "C:\\Users\\edrin\\OneDrive\\Desktop\\Work Space\\GSI_Manage\\GSI_Manage_BackEnd\\Presentation\\Controllers\\AuthController.cs",
+              "RelativeToolTip": "GSI_Manage_BackEnd\\Presentation\\Controllers\\AuthController.cs",
+              "ViewState": "AgIAAAkAAAAAAAAAAAAAABYAAAAIAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-11T17:41:58.895Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "AuthService.cs",
+              "DocumentMoniker": "C:\\Users\\edrin\\OneDrive\\Desktop\\Work Space\\GSI_Manage\\GSI_Manage_BackEnd\\Application\\Services\\AuthService.cs",
+              "RelativeDocumentMoniker": "GSI_Manage_BackEnd\\Application\\Services\\AuthService.cs",
+              "ToolTip": "C:\\Users\\edrin\\OneDrive\\Desktop\\Work Space\\GSI_Manage\\GSI_Manage_BackEnd\\Application\\Services\\AuthService.cs",
+              "RelativeToolTip": "GSI_Manage_BackEnd\\Application\\Services\\AuthService.cs",
+              "ViewState": "AgIAABYAAAAAAAAAAAAQwCwAAAAIAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-11T17:17:22.338Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
