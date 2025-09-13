@@ -32,7 +32,7 @@ RUN chmod +x /app/start.sh
 RUN apk add --no-cache nodejs npm
 
 # Install server dependencies
-RUN npm ci --only=production
+RUN npm ci --omit=dev
 
 WORKDIR /app
 
